@@ -2,159 +2,326 @@
 @section('title','Détails étudiant')
 
 @section('content')
-<div class="container-fluid px-4 py-4">
-    <!-- Breadcrumb avec fond coloré -->
-    <nav aria-label="breadcrumb" class="mb-3">
-        <ol class="breadcrumb p-3 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <li class="breadcrumb-item"><a href="{{ route('etudiants.index') }}" class="text-white text-decoration-none"><i class="bi bi-house-fill me-1"></i>Étudiants</a></li>
-            <li class="breadcrumb-item active text-white opacity-75">Détails</li>
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f3ef 0%, #e8e4df 100%);
+        min-height: 100vh;
+    }
+
+    .page-container {
+        padding: 40px 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .breadcrumb-nav {
+        background: white;
+        border-radius: 12px;
+        padding: 14px 20px;
+        margin-bottom: 20px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .breadcrumb {
+        margin: 0;
+        background: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item a {
+        color: #1e40af;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .breadcrumb-item.active {
+        color: #6b7280;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+        padding: 40px 32px;
+        text-align: center;
+    }
+
+    .profile-avatar {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+    }
+
+    .profile-avatar-placeholder {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        font-weight: 700;
+        color: #1e3a8a;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+    }
+
+    .profile-name {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: white;
+        margin: 0 0 8px 0;
+    }
+
+    .profile-id {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+
+    .info-card-header {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        padding: 20px 24px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .info-card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e3a8a;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .info-card-body {
+        padding: 24px;
+    }
+
+    .info-item {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s;
+        height: 100%;
+    }
+
+    .info-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        border-color: #3b82f6;
+    }
+
+    .info-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1e40af;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1f2937;
+        word-break: break-word;
+    }
+
+    .info-value-empty {
+        color: #9ca3af;
+        font-style: italic;
+        font-weight: 400;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        color: white;
+    }
+
+    .btn-back {
+        background: white;
+        color: #4b5563;
+        border: 1px solid #e5e7eb;
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-back:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+        color: #1f2937;
+    }
+</style>
+
+<div class="page-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-nav">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ route('etudiants.index') }}">
+                    <i class="bi bi-house-fill me-1"></i>Étudiants
+                </a>
+            </li>
+            <li class="breadcrumb-item active">Détails</li>
         </ol>
     </nav>
 
     <div class="row">
-        <div class="col-lg-4 col-md-5 mb-4">
-            <!-- Card photo avec dégradé violet -->
-            <div class="card shadow-lg border-0 overflow-hidden">
-                <div class="card-body text-center p-0">
-                    <div class="p-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                        @if($etudiant->photo)
-                            <img src="{{ asset('storage/'.$etudiant->photo) }}" 
-                                 class="rounded-circle shadow-lg mb-3" 
-                                 width="150" 
-                                 height="150"
-                                 style="object-fit:cover; border: 5px solid rgba(255,255,255,0.3)"
-                                 alt="Photo de {{ $etudiant->prenom }} {{ $etudiant->nom }}">
-                        @else
-                            <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center mb-3 shadow-lg" 
-                                 style="width: 150px; height: 150px; font-size: 3rem; font-weight: 700; border: 5px solid rgba(255,255,255,0.3); color: #667eea;">
-                                {{ strtoupper(substr($etudiant->prenom, 0, 1)) }}{{ strtoupper(substr($etudiant->nom, 0, 1)) }}
-                            </div>
-                        @endif
-                        
-                        <h4 class="mb-1 fw-bold text-white">{{ $etudiant->prenom }} {{ $etudiant->nom }}</h4>
-                        <p class="text-white mb-0 opacity-75">
-                            <i class="bi bi-person-badge"></i> {{ $etudiant->num_apogee }}
-                        </p>
-                    </div>
+        <!-- Profile Card -->
+        <div class="col-lg-4">
+            <div class="profile-card">
+                <div class="profile-header">
+                    @if($etudiant->photo)
+                        <img src="{{ asset('storage/'.$etudiant->photo) }}" 
+                             class="profile-avatar" 
+                             alt="Photo de {{ $etudiant->prenom }} {{ $etudiant->nom }}">
+                    @else
+                        <div class="profile-avatar-placeholder">
+                            {{ strtoupper(substr($etudiant->prenom, 0, 1)) }}{{ strtoupper(substr($etudiant->nom, 0, 1)) }}
+                        </div>
+                    @endif
+                    
+                    <h1 class="profile-name">{{ $etudiant->prenom }} {{ $etudiant->nom }}</h1>
+                    <p class="profile-id">
+                        <i class="bi bi-person-badge me-1"></i> #{{ $etudiant->num_apogee }}
+                    </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-8 col-md-7">
-            <!-- Card informations avec header coloré -->
-            <div class="card shadow-lg border-0 mb-4 overflow-hidden">
-                <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                    <h5 class="mb-0 fw-bold text-white">
-                        <i class="bi bi-info-circle me-2"></i>Informations personnelles
-                    </h5>
+        <!-- Information Card -->
+        <div class="col-lg-8">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <h2 class="info-card-title">
+                        <i class="bi bi-info-circle"></i>
+                        Informations personnelles
+                    </h2>
                 </div>
-                <div class="card-body p-4">
-                    <div class="row g-4">
-                        <!-- Numéro Apogée avec dégradé rose -->
+                <div class="info-card-body">
+                    <div class="row g-3">
+                        <!-- Numéro Apogée -->
                         <div class="col-md-6">
-                            <div class="p-4 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                                <div class="d-flex align-items-start text-white">
-                                    <div class="bg-white bg-opacity-25 rounded-3 p-3 me-3">
-                                        <i class="bi bi-hash fs-4"></i>
-                                    </div>
-                                    <div>
-                                        <small class="d-block opacity-75 mb-1">Numéro Apogée</small>
-                                        <strong class="fs-5">{{ $etudiant->num_apogee }}</strong>
-                                    </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-hash"></i>
                                 </div>
+                                <div class="info-label">Numéro Apogée</div>
+                                <div class="info-value">{{ $etudiant->num_apogee }}</div>
                             </div>
                         </div>
 
-                        <!-- Nom complet avec dégradé bleu -->
+                        <!-- Nom complet -->
                         <div class="col-md-6">
-                            <div class="p-4 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                <div class="d-flex align-items-start text-white">
-                                    <div class="bg-white bg-opacity-25 rounded-3 p-3 me-3">
-                                        <i class="bi bi-person-fill fs-4"></i>
-                                    </div>
-                                    <div>
-                                        <small class="d-block opacity-75 mb-1">Nom complet</small>
-                                        <strong class="fs-5">{{ $etudiant->nom }} {{ $etudiant->prenom }}</strong>
-                                    </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-person-fill"></i>
                                 </div>
+                                <div class="info-label">Nom complet</div>
+                                <div class="info-value">{{ $etudiant->nom }} {{ $etudiant->prenom }}</div>
                             </div>
                         </div>
 
-                        <!-- Email avec dégradé orange -->
+                        <!-- Email -->
                         <div class="col-md-6">
-                            <div class="p-4 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                                <div class="d-flex align-items-start text-white">
-                                    <div class="bg-white bg-opacity-25 rounded-3 p-3 me-3">
-                                        <i class="bi bi-envelope-fill fs-4"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <small class="d-block opacity-75 mb-1">Email</small>
-                                        @if($etudiant->email)
-                                            <strong class="fs-6 text-break">{{ $etudiant->email }}</strong>
-                                        @else
-                                            <span class="fst-italic opacity-75">Non renseigné</span>
-                                        @endif
-                                    </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-envelope-fill"></i>
                                 </div>
+                                <div class="info-label">Email</div>
+                                @if($etudiant->email)
+                                    <div class="info-value">{{ $etudiant->email }}</div>
+                                @else
+                                    <div class="info-value info-value-empty">Non renseigné</div>
+                                @endif
                             </div>
                         </div>
 
-                        <!-- Téléphone avec dégradé vert -->
+                        <!-- Téléphone -->
                         <div class="col-md-6">
-                            <div class="p-4 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-                                <div class="d-flex align-items-start text-white">
-                                    <div class="bg-white bg-opacity-25 rounded-3 p-3 me-3">
-                                        <i class="bi bi-telephone-fill fs-4"></i>
-                                    </div>
-                                    <div>
-                                        <small class="d-block opacity-75 mb-1">Téléphone</small>
-                                        @if($etudiant->tele)
-                                            <strong class="fs-5">{{ $etudiant->tele }}</strong>
-                                        @else
-                                            <span class="fst-italic opacity-75">Non renseigné</span>
-                                        @endif
-                                    </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-telephone-fill"></i>
                                 </div>
+                                <div class="info-label">Téléphone</div>
+                                @if($etudiant->tele)
+                                    <div class="info-value">{{ $etudiant->tele }}</div>
+                                @else
+                                    <div class="info-value info-value-empty">Non renseigné</div>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Actions avec boutons colorés -->
-            <div class="d-flex gap-3">
-                <a href="{{ route('etudiants.edit',$etudiant) }}" class="btn btn-lg shadow-lg border-0 text-white" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+            <!-- Actions -->
+            <div class="d-flex gap-2">
+                <a href="{{ route('etudiants.edit', $etudiant) }}" class="btn-edit">
                     <i class="bi bi-pencil-square me-1"></i> Modifier
                 </a>
-                <a href="{{ route('etudiants.index') }}" class="btn btn-lg shadow-lg border-0 text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <a href="{{ route('etudiants.index') }}" class="btn-back">
                     <i class="bi bi-arrow-left me-1"></i> Retour
                 </a>
             </div>
         </div>
     </div>
 </div>
-
-@push('styles')
-<style>
-    /* Animation des boutons */
-    .btn {
-        transition: all 0.3s ease;
-    }
-    
-    .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
-    }
-    
-    /* Animation des cards d'informations */
-    .col-md-6 > div {
-        transition: all 0.3s ease;
-    }
-    
-    .col-md-6 > div:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
-    }
-</style>
-@endpush
 @endsection
