@@ -331,9 +331,7 @@
                 <div class="social-login">
                     <p>Or Login Using :</p>
                     <div class="social-buttons">
-                        <a href="#" class="social-button facebook">f</a>
-                        <a href="#" class="social-button twitter">t</a>
-                        <a href="#" class="social-button google">G+</a>
+                        <a href="{{ route('google.redirect') }}" class="social-button google">G+</a>
                     </div>
                 </div>
             </form>
